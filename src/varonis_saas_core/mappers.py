@@ -1,7 +1,7 @@
 class BaseMapper:
     def map(self, response: dict) -> list[dict]:
-        cols = response.get("columns", [])
-        return [dict(zip(cols, row)) for row in response.get("rows", [])]
+        cols = response["columns"]
+        return [dict(zip(cols, row)) for row in response["rows"]]
 
 class AlertMapper(BaseMapper):
     pass
@@ -11,4 +11,4 @@ class EventMapper(BaseMapper):
 
 class ThreatModelMapper:
     def map(self, enum_response: list[dict]) -> list[dict]:
-        return [{"id": e.get("dataField"), "name": e.get("displayField")} for e in enum_response]
+        return [{"id": item.get("dataField"), "name": item.get("displayField")} for item in enum_response]
