@@ -8,16 +8,11 @@ def _ensure_utc_iso(dt: datetime | None) -> str | None:
         return None
     if dt.tzinfo is None:
         raise InvalidQueryError("Datetime must be timezone-aware (UTC recommended).")
-    # Normalize to UTC and emit RFC3339-ish ISO string
     return dt.astimezone(timezone.utc).isoformat()
 
 def _validate_time_mode(start: datetime | None, end: datetime | None, last_days: int | None,
                         ingest_from: datetime | None, ingest_to: datetime | None) -> None:
-    modes = [
-        bool(start or end),
-        bool(last_days),
-        bool(ingest_from or ingest_to),
-    ]
+    modes = [bool(start or end), bool(last_days), bool(ingest_from or ingest_to)]
     if sum(modes) > 1:
         raise InvalidQueryError("Multiple time modes specified.")
     if (start and end) and (end < start):
